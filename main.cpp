@@ -1,4 +1,5 @@
 #include <opencv2/opencv.hpp>
+#include <opencv2/tracking.hpp>
 #include <chrono>
 #include <thread>
 #include <iostream>
@@ -25,15 +26,35 @@ int main() {
     auto lastReportTime = std::chrono::steady_clock::now();
     auto lastFrameTime = lastReportTime;
 
+    cv::Point topLeft(1319, 503);
+    cv::Point bottomRight(1392, 633);
+    cv::Rect bbox(topLeft, bottomRight);
+    cv::Ptr<cv::TrackerKCF> tracker = cv::TrackerKCF::create();
+    cap >> frame;
+    tracker->init(frame, bbox);
+
     while (true) {
         cap >> frame;
-        cv::Point topLeft(1319, 503);
-        cv::Point bottomRight(1392, 633);
-        cv::rectangle(frame, topLeft, bottomRight, cv::Scalar(0, 255, 0), 2);
-
+        
         if (frame.empty()) {
             cap.set(cv::CAP_PROP_POS_FRAMES, 0);
             continue;
+        }
+        
+        bool ok = tracker->update(frame, bbox);
+
+        if (ok) {
+            cv::rectangle(frame, bbox, cv::Scalar(0, 255, 0), 2);
+        } else {
+            cv::putText(frame, "Tracking failure",
+                cv::Point(50, 80),
+                cv::FONT_HERSHEY_SIMPLEX,
+                2,
+                cv::Scalar(0, 0, 255),
+                2
+            );
+            tracker = cv::TrackerKCF::create();
+            tracker->init(frame, bbox);
         }
         
         frameCount++;
