@@ -17,7 +17,6 @@ int main() {
     cv::Mat frame;
     int frameCount = 0;
 
-    
     cv::namedWindow("Video", cv::WINDOW_NORMAL);
     cv::resizeWindow("Video", 1280, 720);
     
@@ -28,6 +27,9 @@ int main() {
 
     while (true) {
         cap >> frame;
+        cv::Point topLeft(1319, 503);
+        cv::Point bottomRight(1392, 633);
+        cv::rectangle(frame, topLeft, bottomRight, cv::Scalar(0, 255, 0), 2);
 
         if (frame.empty()) {
             cap.set(cv::CAP_PROP_POS_FRAMES, 0);
