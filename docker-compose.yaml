@@ -1,0 +1,13 @@
+services:
+  gstreamer_custom:
+    image: gstreamer_custom:0.3.0
+    container_name: gstreamer_custom
+    build: .
+    volumes:
+      - ./:/app
+    environment:
+      - XDG_RUNTIME_DIR=/run/user/1/ # Prevent raise error message XDG_RUNTIME_DIR is invalid
+    network_mode: "host"
+    tty: True
+    mem_limit: 1g
+    cpus: 2
