@@ -1,15 +1,24 @@
 .PHONY: build
 
-CC = gcc
-CFLAGS = $(shell pkg-config --cflags gstreamer-1.0)
-LIBS = $(shell pkg-config --libs gstreamer-1.0)
+CXX = g++
 
-TARGET = pipeline
-SRC = pipeline.c 
+CXXFLAGS = $(shell pkg-config --cflags opencv4) \
+			-I/usr/local/include/onnxruntime \
+			-O2
 
-# Compile
-compile:
-	$(CC) $(SRC) -o $(TARGET) $(CFLAGS) $(LIBS)
+LDFLAGS = $(shell pkg-config --libs opencv4) \
+			-L/usr/local/lib \
+			-lonnxruntime
+			
+TARGET = detect
+
+all: $(TARGET)
+
+$(TARGET): detect.c coco_labels.h
+	$(CXX) -o $(TARGET) detect.c $(CXXFLAGS) $(LDFLAGS)
+
+clean:
+	rm -f $(TARGET)
 
 # Docker stuff
 reattach:
