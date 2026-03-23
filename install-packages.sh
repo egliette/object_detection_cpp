@@ -65,10 +65,10 @@ apt-get -y  install --no-install-recommends \
     wget
 
 # Install ONNXRuntime
-wget https://github.com/microsoft/onnxruntime/releases/download/v1.18.0/onnxruntime-linux-x64-1.18.0.tgz
-tar -xzf onnxruntime-linux-x64-1.18.0.tgz
-cp -r onnxruntime-linux-x64-1.18.0/include/* /usr/local/include/
-cp -r onnxruntime-linux-x64-1.18.0/lib/*     /usr/local/lib/
+wget https://github.com/microsoft/onnxruntime/releases/download/v1.20.1/onnxruntime-linux-x64-gpu-1.20.1.tgz
+tar -xzf onnxruntime-linux-x64-gpu-1.20.1.tgz
+cp -r onnxruntime-linux-x64-gpu-1.20.1/include/* /usr/local/include/
+cp -r onnxruntime-linux-x64-gpu-1.20.1/lib/*     /usr/local/lib/
 ldconfig
 
 # Delete cached files we don't need anymore (note that if you're

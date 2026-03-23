@@ -1,7 +1,7 @@
 services:
-  gstreamer_custom:
-    image: gstreamer_custom:0.3.0
-    container_name: gstreamer_custom
+  object_detection:
+    image: object_detection:0.3.0
+    container_name: object_detection
     build: .
     volumes:
       - ./:/app
@@ -9,5 +9,12 @@ services:
       - XDG_RUNTIME_DIR=/run/user/1/ # Prevent raise error message XDG_RUNTIME_DIR is invalid
     network_mode: "host"
     tty: True
-    mem_limit: 1g
-    cpus: 2
+    mem_limit: 2g
+    cpus: 4
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]

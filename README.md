@@ -14,19 +14,19 @@ Then inside the container, compile and install:
 ```bash
 cd /app
 make
-cp detect /usr/local/bin/detect   # run from any directory
+cp bin/detect /usr/local/bin/detect   # run from any directory
 ```
 
 ## Usage
 
 ```bash
-detect <input.mp4> <model.onnx> <output.mp4> [confidence]
+bin/detect <input.mp4> <model.onnx> <output.mp4> [confidence]
 ```
 
 ```bash
 # examples
-detect video.mp4 yolov8n.onnx out.mp4
-detect video.mp4 yolov8n.onnx out.mp4 0.5
+bin/detect videos/street.mp4 models/yolov8n.onnx videos/out.mp4
+bin/detect videos/street.mp4 models/yolov8n.onnx videos/out.mp4 0.5
 ```
 
 ## Notes

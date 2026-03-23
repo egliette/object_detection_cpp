@@ -10,7 +10,7 @@ LDFLAGS = $(shell pkg-config --libs opencv4) \
 			-L/usr/local/lib \
 			-lonnxruntime
 			
-TARGET = detect
+TARGET = bin/detect
 
 all: $(TARGET)
 
@@ -24,10 +24,10 @@ clean:
 reattach:
 	docker compose down
 	docker compose up -d
-	docker exec -it gstreamer_custom bash
+	docker exec -it object_detection bash
 
 attach:
-	docker exec -it gstreamer_custom bash
+	docker exec -it object_detection bash
 
 build:
 	docker compose up --build -d

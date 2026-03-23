@@ -60,8 +60,14 @@ int main(int argc, char *argv[])
     /* --- initialize ONNX Runtime --- */
     const OrtApi *ort = OrtGetApiBase()->GetApi(ORT_API_VERSION);
 
+    OrtCUDAProviderOptions cuda_opts;
+    memset(&cuda_opts, 0, sizeof(cuda_opts));
+    cuda_opts.device_id = 0; 
+
     ORT_CHECK(ort->CreateEnv(ORT_LOGGING_LEVEL_WARNING, "detect", &env));
     ORT_CHECK(ort->CreateSessionOptions(&opts));
+    ORT_CHECK(ort->SessionOptionsAppendExecutionProvider_CUDA(opts, &cuda_opts));
+    ORT_CHECK(ort->AddSessionConfigEntry(opts, "session.use_env_allocators", "1"));
     ORT_CHECK(ort->CreateSession(env, model_path, opts, &session));
     printf("Model loaded.\n");
 
@@ -72,8 +78,8 @@ int main(int argc, char *argv[])
     printf("Model output: %s\n", output_name);
 
     /* --- allocate input buffer: [1, 3, 640, 640] float32 --- */
-    input_size   = 1 * 3 * MODEL_INPUT_H * MODEL_INPUT_W;
-    input_data   = (float *)malloc(input_size * sizeof(float));
+    input_size    = 1 * 3 * MODEL_INPUT_H * MODEL_INPUT_W;
+    input_data    = (float *)malloc(input_size * sizeof(float));
     if (!input_data) { fprintf(stderr, "Out of memory\n"); goto cleanup; }
 
     input_dims[0] = 1;
@@ -114,7 +120,7 @@ int main(int argc, char *argv[])
 
         while (cap.read(frame)) {
             frame_idx++;
-            if (frame_idx % 30 == 0)
+            if (frame_idx % 100 == 0)
                 printf("Frame %d / %d\n", frame_idx, total);
 
             /* -----------------------------------------------------------------
