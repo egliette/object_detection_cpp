@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include <string.h>
 #include <math.h>
 #include <onnxruntime_c_api.h>
@@ -241,10 +242,21 @@ int main(int argc, char *argv[])
         int           frame_idx = 0;
         LetterboxInfo lb;
 
+        double model_fps = 0.0;
+        clock_t start_time = clock();
+
         while (cap.read(frame)) {
             frame_idx++;
             if (frame_idx % 100 == 0)
-                printf("Frame %d / %d\n", frame_idx, total);
+            {
+                double elapsed = (double)(clock() - start_time) / CLOCKS_PER_SEC;
+                printf(
+                    "Frame %d / %d. Model FPS: %.2f\n", 
+                    frame_idx, 
+                    total, 
+                    frame_idx / elapsed
+                );
+            }
 
             /* -----------------------------------------------------------------
              * Preprocess: letterbox to 640x640, NCHW RGB [0,1]
