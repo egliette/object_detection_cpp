@@ -31,3 +31,12 @@ attach:
 
 build:
 	docker compose up --build -d
+
+compile:
+	make clean
+	make
+	cp bin/detect /usr/local/bin/detect 
+
+run_sample:
+	bin/detect videos/street.mp4 models/yolov8n.onnx videos/out.mp4
+
